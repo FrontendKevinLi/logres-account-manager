@@ -16,7 +16,7 @@ class AccountInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Controller controller = Get.put(Controller());
+    AccountController accountController = Get.put(AccountController());
 
     return Card(
       child: Column(
@@ -47,7 +47,7 @@ class AccountInfoCard extends StatelessWidget {
                           TextButton(
                             onPressed: () {
                               Navigator.pop(context, 'OK');
-                              controller.deleteAccount(accountInfo.id);
+                              accountController.deleteAccount(accountInfo.id);
                             },
                             child: Text('OK'),
                           ),

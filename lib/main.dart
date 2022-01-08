@@ -48,8 +48,8 @@ class _MyHomePageState extends State<MyHomePage> {
     List<dynamic>? accountInfoList = dataBox.get('accountInfoList');
     if (accountInfoList == null) return;
 
-    final Controller controller = Get.put(Controller());
-    controller.initAccountList(accountInfoList
+    final AccountController accountController = Get.put(AccountController());
+    accountController.initAccountList(accountInfoList
         .map((accountInfo) => new AccountInfo(
               id: accountInfo?.id,
               name: accountInfo?.name,
@@ -67,14 +67,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final Controller controller = Get.put(Controller());
+    final AccountController accountController = Get.put(AccountController());
 
     return Scaffold(
         appBar: AppBar(
           title: Text(Constant.apptitle),
         ),
         body: Obx(() => ListView(
-              children: controller.accountInfoList
+              children: accountController.accountInfoList
                   .map((accountInfo) => AccountInfoCard(
                         key: Key(accountInfo.id),
                         accountInfo: accountInfo,
@@ -91,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class Controller extends GetxController {
+class AccountController extends GetxController {
   RxList<AccountInfo> accountInfoList = <AccountInfo>[].obs;
 
   void initAccountList(List<AccountInfo> newAccountInfoList) {

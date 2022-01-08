@@ -30,8 +30,8 @@ class _AccountInfoCreateScreenState extends State<AccountInfoCreateScreen> {
       TextEditingController();
   String appBarTitle = '';
   String confirmButtonLabel = '';
-  Future Function(Controller controller) confirmButtonCallback =
-      (Controller controller) async {};
+  Future Function(AccountController accountController) confirmButtonCallback =
+      (AccountController accountController) async {};
 
   void _initEditingControllers() {
     nameEditingController.text = widget.accountInfo.name;
@@ -52,7 +52,7 @@ class _AccountInfoCreateScreenState extends State<AccountInfoCreateScreen> {
     }
   }
 
-  Future _addNewAccount(Controller controller) async {
+  Future _addNewAccount(AccountController accountController) async {
     Uuid uuid = Uuid();
     final newAccountInfo = AccountInfo(
       id: uuid.v4(),
@@ -60,26 +60,25 @@ class _AccountInfoCreateScreenState extends State<AccountInfoCreateScreen> {
       accountId: accountIdEditingController.text,
       password: passwordEditingController.text,
     );
-    controller.addNewAccount(newAccountInfo);
+    accountController.addNewAccount(newAccountInfo);
 
     await Hive.initFlutter();
     var dataBox = await Hive.openBox('data');
-    List<AccountInfo> accountInfoList = controller.accountInfoList;
+    List<AccountInfo> accountInfoList = accountController.accountInfoList;
     dataBox.put('accountInfoList', accountInfoList);
     Get.back();
   }
 
   Future _editAccount(
-    Controller controller,
+    AccountController accountController,
     AccountInfo editedAccountInfo,
   ) async {
-    controller.editAccount(editedAccountInfo);
+    accountController.editAccount(editedAccountInfo);
     Get.back();
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _initEditingControllers();
     _initByActionType();
@@ -87,7 +86,7 @@ class _AccountInfoCreateScreenState extends State<AccountInfoCreateScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final Controller controller = Get.put(Controller());
+    final AccountController accountController = Get.put(AccountController());
 
     return Scaffold(
       appBar: AppBar(
@@ -136,7 +135,7 @@ class _AccountInfoCreateScreenState extends State<AccountInfoCreateScreen> {
                   ElevatedButton(
                     onPressed: () async {
                       if (widget.actionType == ActionType.Add) {
-                        _addNewAccount(controller);
+                        _addNewAccount(accountController);
                         return;
                       }
                       if (widget.actionType == ActionType.Edit) {
@@ -146,7 +145,7 @@ class _AccountInfoCreateScreenState extends State<AccountInfoCreateScreen> {
                           accountId: accountIdEditingController.text,
                           password: passwordEditingController.text,
                         );
-                        _editAccount(controller, editedAccountInfo);
+                        _editAccount(accountController, editedAccountInfo);
                       }
                     },
                     child: Text(confirmButtonLabel),
